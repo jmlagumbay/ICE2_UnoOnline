@@ -37,43 +37,47 @@ public class UnoOnline
      * 
      */
     private void run()
-    {
-        int userCount=0;//keep track of number of users for array
-        Scanner sc = new Scanner(System.in);
-        System.out.println("please enter your desired user name:");
-        String userName = sc.nextLine();
-        boolean validPassword=false;
-        String password="";
-        while(!validPassword)
-        {
-            System.out.println("Passwords must have at least 8 characters");
-            System.out.println("Passwords must have at least one special character");
-            System.out.println("Please enter your desired password:"); 
-            
-            password = sc.nextLine();
-            int specialCharCount=0;
-            //iterate over each character to see if it is a special character
-            for(int i=0;i<password.length(); i++)
-            {
-                if(!(Character.isLetterOrDigit(password.charAt(i))))
-                {
-                    //now we know there is at least one special character
-                    specialCharCount++;
-                }
-            }
-            if(specialCharCount>0 &&password.length()>7)
-            {
-                validPassword=true;
-            }
-        }//loop only ends when password is valid so now we create the User
+{
+    int userCount = 0; // Counting how many users we have
+    Scanner sc = new Scanner(System.in); // This lets people type answers
+    
+    System.out.println("please enter your desired user name:");
+    String userName = sc.nextLine(); // Get their username
+    
+    // CREATE OUR PASSWORD CHECKER!
+    PasswordValidator validator = new PasswordValidator();
+    
+    boolean validPassword = false; // Set password invalid as default.
+    String password = "";
+    
+    // System will ask to input password until meet the requirements
+    while (!validPassword) {
         
-        User newUser = new User(userName, password);
-        users[userCount] = newUser;//add the new user to the user list
-        userCount++;
-        System.out.println("New User Added");
-        System.out.println("UserName: " + userName);
-        System.out.println("Password: just kidding can't show password");
-    }//end run method
+        // Display requirements
+        System.out.println(validator.getRequirementsMessage());
+        System.out.println("Please enter your desired password:");
+        
+        password = sc.nextLine(); // Assigning the password
+        
+        // Validates if password is good or bad
+        validPassword = validator.isValid(password);
+        
+        // If password is bad, system ask player to type another password
+        if (!validPassword) {
+            System.out.println("Password does not meet requirements. Please try again.\n");
+        }
+    }
+    
+    // Adding new user if username and password (valid)
+    User newUser = new User(userName, password);
+    users[userCount] = newUser;
+    userCount++;
+    
+    // Display player added and provide username
+    System.out.println("New User Added");
+    System.out.println("UserName: " + userName);
+    System.out.println("Password: just kidding can't show password");
+}
    
     
 }//end class
